@@ -1,0 +1,30 @@
+{
+  "name": "wabbit",
+  "version": "1.0.0",
+  "description": "A library to simplify working with RabbitMQ - built on top of Wascally.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rkstar/wabbit.git"
+  },
+  "keywords": [
+    "rabbitmq",
+    "wascally",
+    "messaging",
+    "amqp"
+  ],
+  "author": "David Fudge <rkstar@mac.com> (https://github.com/rkstar)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rkstar/wabbit/issues"
+  },
+  "homepage": "https://github.com/rkstar/wabbit#readme",
+  "dependencies": {
+    "wascally": "^0.2.10"
+  },
+  "devDependencies": {}
+}
