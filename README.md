@@ -29,7 +29,7 @@ const Wabbit = require('wabbit'),
   ex = new Wabbit.Exchange('data-source-ex.1'),
   readQueue = new Wabbit.Queue({
     name: 'read-queue.1',
-    keys: read-from-data-source'
+    keys: 'read-from-data-source'
   })
   
 readQueue.registerHandler({
