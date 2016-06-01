@@ -24,7 +24,6 @@
   },
   "homepage": "https://github.com/rkstar/wabbit#readme",
   "dependencies": {
-    "express": "^4.13.4",
     "lodash": "^4.13.1",
     "wascally": "^0.2.10"
   },
