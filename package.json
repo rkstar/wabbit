@@ -1,6 +1,6 @@
 {
   "name": "wabbit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A library to simplify working with RabbitMQ - built on top of Wascally.",
   "main": "src/index.js",
   "scripts": {
