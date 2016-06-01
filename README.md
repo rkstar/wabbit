@@ -68,5 +68,5 @@ Wabbit.publish('read-from-data-source', {more: 'data'})
 ```
 
 ## Reading
-[Wascally](https://github.com/LeanKit-Labs/wascally)
-[RabbitMQ](https://www.rabbitmq.com/)
+* [Wascally](https://github.com/LeanKit-Labs/wascally)
+* [RabbitMQ](https://www.rabbitmq.com/)
