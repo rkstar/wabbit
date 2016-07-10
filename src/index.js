@@ -413,5 +413,4 @@ class Wabbit {
 }
 
 const WabbitInstance = new Wabbit()
-
-export default WabbitInstance
+module.exports = WabbitInstance
