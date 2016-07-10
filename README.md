@@ -1,19 +1,19 @@
 Wabbit
 ===============
 
-Simplify working with RabbitMQ - built on top of Wascally
+Simplify working with RabbitMQ - built on top of Rabbot
 
 ## Dependencies
 * [lodash](https://www.npmjs.com/package/lodash)
-* [wascally](https://github.com/LeanKit-Labs/wascally)
+* [rabbot](https://github.com/arobson/rabbot)
 
 ## Usage
 1. `npm install --save wabbit`
 2. Use this on the server only!
 
 ## Configuration
-Configure `Wabbit` with the config vars that you would pass to `Wascally` when configuring that service.
-*see [Wascally README](https://github.com/LeanKit-Labs/wascally) for config options*
+Configure `Wabbit` with the config vars that you would pass to `Rabbot` when configuring that service.
+*see [Rabbot README](https://github.com/arobson/rabbot) for config options*
 ```javascript
 const Wabbit = require('wabbit')
 // Wabbit.nackOnError()
@@ -68,5 +68,5 @@ Wabbit.publish('read-from-data-source', {more: 'data'})
 ```
 
 ## Reading
-* [Wascally](https://github.com/LeanKit-Labs/wascally)
+* [Rabbot](https://github.com/arobson/rabbot)
 * [RabbitMQ](https://www.rabbitmq.com/)

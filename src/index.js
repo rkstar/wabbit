@@ -1,4 +1,4 @@
-const Wascally = require('wascally'),
+const Rabbot = require('rabbot'),
   _ = require('lodash'),
   EventEmitter = require('events').EventEmitter,
   ee = new EventEmitter(),
@@ -13,7 +13,7 @@ class Wabbit {
   }
 
   nackOnError(){
-    Wascally.nackOnError()
+    Rabbot.nackOnError()
   }
 
   get debug(){
@@ -26,13 +26,13 @@ class Wabbit {
   configure(config){
     // NOTE
     // we will return a promise that will resolve
-    // after we have fully configured Wascally AND Wabbit
+    // after we have fully configured Rabbot AND Wabbit
     // and registered all of the queues and exchanges
     return new Promise((resolve, reject)=>{
-      Wascally.configure(config)
+      Rabbot.configure(config)
         .done(()=>{
           if( this.debug ){
-            console.log(prefix, "Wascally configured.")
+            console.log(prefix, "Rabbot configured.")
           }
 
           const {bindings} = config
@@ -72,9 +72,9 @@ class Wabbit {
 
   dump(){
     _.values(this.exchanges).map((exchange)=>{
-      console.log(exchange)
+      console.log(JSON.stringify(exchange, true, 2))
       _.values(exchange.queues).map((queue)=>{
-        console.log(queue)
+        console.log(JSON.stringify(queue, true, 2))
       })
     })
   }
@@ -99,7 +99,9 @@ class Wabbit {
     // everything is registered (trickle-down...)
     // try to empty our messages in memory this.messages
     if( this.debug ){
-      console.log(prefix, "Publishing stored messages.")
+      if( _.isArray(this.messages) && this.messages.length ){
+        console.log(prefix, "Publishing stored messages.")
+      }
     }
     let msg = null
     while( msg = this.messages.shift() ){
@@ -121,37 +123,58 @@ class Wabbit {
   }
 
   runQueue(queue, exchange){
-    if( !_.isArray(queue.handlers) || !queue.handlers.length ){
-      return
-    }
-
-    queue.handlers.map((handler)=>{
-      if( !handler || !handler.key || !handler.handler ){
-        return
+    const startSubscription = (_.isArray(queue.handlers) && queue.handlers.length)
+    if( !startSubscription ){
+      let key
+      while( key = queue.keys.shift() ){
+        const route = {
+          key,
+          exchange: exchange.name,
+          queue: queue.name
+        }
+        this.createRouteMap(route)
       }
-      this.routeMap[handler.key] = {
-        routingKey: handler.key,
-        type: handler.key,
-        exchange: exchange.name,
-        queue: queue.name
-      }
+    } else {
+      queue.handlers.map((handler)=>{
+        if( !handler || !handler.key || !handler.handler ){
+          return
+        }
 
-      Wascally.handle(handler.key, (msg)=>{
-        handler.handler(msg, (result)=>{
-          if( msg.properties.headers.reply ){
-            msg.reply(result)
-          } else {
-            msg.ack()
-          }
-        })
+        const route = {
+          key: handler.key,
+          exchange: exchange.name,
+          queue: queue.name
+        }
+        this.createRouteMap(route)
+
+        Rabbot
+          .handle({
+            type: handler.key,
+            handler(msg){
+              handler.handler(msg, (result)=>{
+                if( msg.properties.headers.reply ){
+                  msg.reply(result)
+                } else {
+                  msg.ack()
+                }
+              })
+            }
+          })
+          .catch((err, msg)=>{
+            if( this.debug ){
+              console.log(prefix, err)
+              console.log(prefix, msg)
+            }
+          })
       })
-    })
-    // all handlers have been initialized for this queue
-    // we can safely start the subscription
-    if( this.debug ){
-      console.log(prefix, 'Starting subscription on:', queue.name)
+
+      // all handlers have been initialized for this queue
+      // we can safely start the subscription
+      if( this.debug ){
+        console.log(prefix, 'Starting subscription on:', queue.name)
+      }
+      Rabbot.startSubscription(queue.name)
     }
-    Wascally.startSubscription(queue.name)
   }
 
   registerExchange(exchange){
@@ -173,31 +196,71 @@ class Wabbit {
   }
 
   request(key, msg){
-    if( !Wascally ){
-      console.warn('Queueing request for delivery when Wascally is available.')
+    if( this.debug ){
+      console.log(prefix, 'requested:', key, msg)
+    }
+    if( !Rabbot ){
+      console.warn('Queueing request for delivery when Rabbot is available.')
       this.messages.push(Object.assign({}, {type:'request'}, {key, msg}))
       return
     }
 
-    const map = this.routeMap[key]
-    return Wascally.request(map.exchange, Object.assign({},{
+    const route = this.routeMap[key]
+    if( _.isNull(route) || _.isUndefined(route) ){
+      if( this.debug ){
+        console.log(prefix, 'no route mapped for:', key, route)
+      }
+      return
+    }
+
+    const {type, routingKey, exchange, queue} = route
+    const options = Object.assign({},{
+      routingKey, type,
       body: msg,
-      headers: {reply:true}
-    }, _.pick(map, ['routingKey','type'])))
+      headers: {reply: true},
+      replyTimeout: 2000
+    })
+    if( this.debug ){
+      console.log(prefix, 'requesting w/options:', JSON.stringify(options, true, 2))
+    }
+    return Rabbot.request(exchange, options)
   }
 
   publish(key, msg){
-    if( !Wascally ){
-      console.warn('Queueing request for delivery when Wascally is available.')
+    if( this.debug ){
+      console.log(prefix, 'published:', key, msg)
+    }
+    if( !Rabbot ){
+      console.warn('Queueing request for delivery when Rabbot is available.')
       this.messages.push(Object.assign({}, {type:'publish'}, {key, msg}))
       return
     }
 
-    const map = this.routeMap[key]
-    return Wascally.publish(map.exchange, Object.assign({},{
-      body: msg,
-      headers: {reply:false}
-    }, _.pick(map, ['routingKey','type'])))
+    const route = this.routeMap[key]
+    if( _.isNull(route) || _.isUndefined(route) ){
+      if( this.debug ){
+        console.log(prefix, 'no route mapped for:', key, route)
+      }
+      return
+    }
+
+    const {type, routingKey, exchange, queue} = route
+    const options = Object.assign({},{
+      routingKey, type,
+      body: msg
+    })
+    if( this.debug ){
+      console.log(prefix, 'publishing w/options:', JSON.stringify(options, true, 2))
+    }
+    return Rabbot.publish(exchange, options)
+  }
+
+  createRouteMap({key, queue, exchange}){
+    this.routeMap[key] = {
+      queue, exchange,
+      routingKey: key,
+      type: key
+    }
   }
 
   get routeMap(){
@@ -349,4 +412,6 @@ class Wabbit {
   }
 }
 
-module.exports = new Wabbit()
+const WabbitInstance = new Wabbit()
+
+export default WabbitInstance
