@@ -1,8 +1,7 @@
 {
   "name": "wabbit",
-  "version": "1.0.3",
-  "description": "A library to simplify working with RabbitMQ - built on top of Wascally.",
-  "main": "src/index.js",
+  "version": "1.1.0",
+  "description": "A library to simplify working with RabbitMQ - built on top of Rabbot.",
   "scripts": {
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,7 +12,7 @@
   },
   "keywords": [
     "rabbitmq",
-    "wascally",
+    "rabbot",
     "messaging",
     "amqp"
   ],
@@ -25,7 +24,7 @@
   "homepage": "https://github.com/rkstar/wabbit#readme",
   "dependencies": {
     "lodash": "^4.13.1",
-    "wascally": "^0.2.10"
+    "rabbot": "^1.0.3"
   },
   "devDependencies": {}
 }
