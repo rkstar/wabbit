@@ -1,0 +1,113 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/rkstar/.nvm/versions/node/v6.3.0/bin/node',
+1 verbose cli   '/Users/rkstar/.nvm/versions/node/v6.3.0/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.3
+3 info using node@v6.3.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/rkstar/dev/npm/wabbit',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/rkstar/.npm/wabbit/1.1.0/package.tgz not in flight; packing
+9 verbose correctMkdir /Users/rkstar/.npm correctMkdir not in flight; initializing
+10 info lifecycle wabbit@1.1.0~prepublish: wabbit@1.1.0
+11 silly lifecycle wabbit@1.1.0~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ '/Users/rkstar/.npm/wabbit/1.1.0/package.tgz',
+12 verbose tar pack   '/Users/rkstar/dev/npm/wabbit' ]
+13 verbose tarball /Users/rkstar/.npm/wabbit/1.1.0/package.tgz
+14 verbose folder /Users/rkstar/dev/npm/wabbit
+15 verbose addLocalTarball adding from inside cache /Users/rkstar/.npm/wabbit/1.1.0/package.tgz
+16 verbose correctMkdir /Users/rkstar/.npm correctMkdir not in flight; initializing
+17 silly cache afterAdd wabbit@1.1.0
+18 verbose afterAdd /Users/rkstar/.npm/wabbit/1.1.0/package/package.json not in flight; writing
+19 verbose correctMkdir /Users/rkstar/.npm correctMkdir not in flight; initializing
+20 verbose afterAdd /Users/rkstar/.npm/wabbit/1.1.0/package/package.json written
+21 silly publish { name: 'wabbit',
+21 silly publish   version: '1.1.0',
+21 silly publish   description: 'A library to simplify working with RabbitMQ - built on top of Rabbot.',
+21 silly publish   scripts:
+21 silly publish    { start: 'node src/index.js',
+21 silly publish      test: 'echo "Error: no test specified" && exit 1' },
+21 silly publish   repository: { type: 'git', url: 'git+https://github.com/rkstar/wabbit.git' },
+21 silly publish   keywords: [ 'rabbitmq', 'rabbot', 'messaging', 'amqp' ],
+21 silly publish   author:
+21 silly publish    { name: 'David Fudge',
+21 silly publish      email: 'rkstar@mac.com',
+21 silly publish      url: 'https://github.com/rkstar' },
+21 silly publish   license: 'ISC',
+21 silly publish   bugs: { url: 'https://github.com/rkstar/wabbit/issues' },
+21 silly publish   homepage: 'https://github.com/rkstar/wabbit#readme',
+21 silly publish   dependencies: { lodash: '^4.13.1', rabbot: '^1.0.3' },
+21 silly publish   devDependencies: {},
+21 silly publish   readme: 'Wabbit\n===============\n\nSimplify working with RabbitMQ - built on top of Rabbot\n\n## Dependencies\n* [lodash](https://www.npmjs.com/package/lodash)\n* [rabbot](https://github.com/arobson/rabbot)\n\n## Usage\n1. `npm install --save wabbit`\n2. Use this on the server only!\n\n## Configuration\nConfigure `Wabbit` with the config vars that you would pass to `Rabbot` when configuring that service.\n*see [Rabbot README](https://github.com/arobson/rabbot) for config options*\n```javascript\nconst Wabbit = require(\'wabbit\')\n// Wabbit.nackOnError()\n// Wabbit.debug = true\nWabbit.configure(config)\n  .then(()=>{ Wabbit.run() })\n```\n\n## Methods (server)\nYou can set up your message handlers like this:\n```javascript\nconst Wabbit = require(\'wabbit\'),\n  ex = new Wabbit.Exchange(\'data-source-ex.1\'),\n  readQueue = new Wabbit.Queue({\n    name: \'read-queue.1\',\n    keys: \'read-from-data-source\'\n  })\n  \nreadQueue.registerHandler({\n  key: \'read-from-data-source\',\n  handler(msg, ack){\n    // ...\n    // do something with the msg.body as per Wascally docs\n    //\n    \n    if( some_error_condition ){\n      msg.reject()\n      // or\n      msg.nack()\n    }\n    \n    // ack this message from the queue and send back a reply if\n    // this message was sent with Wabbit.request (no reply if sent with Wabbit.publish)\n    ack(\'this message has been handled!\')\n  })\n})\n\nex.registerQueue(readQueue)\n```\n\nThen you send messages to it like this:\n```javascript\nWabbit.request(\'read-from-data-source\', {some: \'data\'})\n  .then((response)=>{\n    console.log(response)\n    // => "this message has been handled!"\n  })\n```\n... or, if you do not need to know when the action has been completed...\n```javascript\nWabbit.publish(\'read-from-data-source\', {more: \'data\'})\n```\n\n## Reading\n* [Rabbot](https://github.com/arobson/rabbot)\n* [RabbitMQ](https://www.rabbitmq.com/)',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: 'cdd4e8c0494fbfaeb7711a238698b737be39d2c4',
+21 silly publish   _id: 'wabbit@1.1.0',
+21 silly publish   _shasum: '1ff096835cac1421abdabec42c792f2665ece2ad',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name wabbit
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'wabbit',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'wabbit',
+26 silly mapToRegistry   name: 'wabbit',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/wabbit
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading /Users/rkstar/.npm/wabbit/1.1.0/package.tgz
+30 verbose request uri https://registry.npmjs.org/wabbit
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 11:21:06 AM
+33 verbose request using bearer token for auth
+34 verbose request id 47585d0cd73f56f1
+35 http request PUT https://registry.npmjs.org/wabbit
+36 http 403 https://registry.npmjs.org/wabbit
+37 verbose headers { 'content-type': 'application/json',
+37 verbose headers   'cache-control': 'max-age=300',
+37 verbose headers   'content-length': '95',
+37 verbose headers   'accept-ranges': 'bytes',
+37 verbose headers   date: 'Sun, 10 Jul 2016 15:21:07 GMT',
+37 verbose headers   via: '1.1 varnish',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-served-by': 'cache-iad2632-IAD',
+37 verbose headers   'x-cache': 'MISS',
+37 verbose headers   'x-cache-hits': '0',
+37 verbose headers   'x-timer': 'S1468164067.222800,VS0,VE741',
+37 verbose headers   vary: 'Accept-Encoding' }
+38 verbose request invalidating /Users/rkstar/.npm/registry.npmjs.org/wabbit on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: "You cannot publish over the previously published version 1.1.0." : wabbit
+40 verbose stack     at makeError (/Users/rkstar/.nvm/versions/node/v6.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (/Users/rkstar/.nvm/versions/node/v6.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+40 verbose stack     at Request._callback (/Users/rkstar/.nvm/versions/node/v6.3.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+40 verbose stack     at Request.self.callback (/Users/rkstar/.nvm/versions/node/v6.3.0/lib/node_modules/npm/node_modules/request/request.js:200:22)
+40 verbose stack     at emitTwo (events.js:106:13)
+40 verbose stack     at Request.emit (events.js:191:7)
+40 verbose stack     at Request.<anonymous> (/Users/rkstar/.nvm/versions/node/v6.3.0/lib/node_modules/npm/node_modules/request/request.js:1067:10)
+40 verbose stack     at emitOne (events.js:101:20)
+40 verbose stack     at Request.emit (events.js:188:7)
+40 verbose stack     at IncomingMessage.<anonymous> (/Users/rkstar/.nvm/versions/node/v6.3.0/lib/node_modules/npm/node_modules/request/request.js:988:12)
+41 verbose statusCode 403
+42 verbose pkgid wabbit
+43 verbose cwd /Users/rkstar/dev/npm/wabbit
+44 error Darwin 15.5.0
+45 error argv "/Users/rkstar/.nvm/versions/node/v6.3.0/bin/node" "/Users/rkstar/.nvm/versions/node/v6.3.0/bin/npm" "publish"
+46 error node v6.3.0
+47 error npm  v3.10.3
+48 error code E403
+49 error "You cannot publish over the previously published version 1.1.0." : wabbit
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]
