@@ -1,6 +1,6 @@
 {
   "name": "wabbit",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "A library to simplify working with RabbitMQ - built on top of Rabbot.",
   "scripts": {
     "start": "node src/index.js",
