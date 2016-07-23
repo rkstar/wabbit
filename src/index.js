@@ -151,7 +151,7 @@ class Wabbit {
           .handle({
             type: handler.key,
             handler(msg){
-              handler.handler(msg, (result)=>{
+              handler.handler(msg, (result={})=>{
                 if( msg.properties.headers.reply ){
                   msg.reply(result)
                 } else {
