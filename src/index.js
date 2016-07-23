@@ -151,9 +151,10 @@ class Wabbit {
           .handle({
             type: handler.key,
             handler(msg){
-              handler.handler(msg, (result={})=>{
+              handler.handler(msg, (result)=>{
                 if( msg.properties.headers.reply ){
-                  msg.reply(result)
+                  const reply = _.isUndefined(result) || _.isNull(result) ? {result} : result
+                  msg.reply(reply)
                 } else {
                   msg.ack()
                 }
