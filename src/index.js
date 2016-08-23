@@ -12,6 +12,10 @@ class Wabbit {
     return instance
   }
 
+  rejectUnhandled(){
+    Rabbot.rejectUnhandled()
+  }
+
   nackOnError(){
     Rabbot.nackOnError()
   }
@@ -28,6 +32,13 @@ class Wabbit {
   }
   set replyWithBody(value){
     this._replyWithBody = _.isBoolean(value) ? value : (value)
+  }
+
+  get rejectOnError(){
+    return this._rejectOnError || false
+  }
+  set rejectOnError(value){
+    this._rejectOnError = _.isBoolean(value) ? value : (value)
   }
 
   configure(config){
@@ -172,6 +183,10 @@ class Wabbit {
             if( this.debug ){
               console.log(prefix, err)
               console.log(prefix, msg)
+            }
+
+            if( this.rejectOnError ){
+              msg.reject()
             }
           })
       })
