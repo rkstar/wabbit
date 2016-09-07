@@ -1,6 +1,6 @@
 {
   "name": "wabbit",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "A library to simplify working with RabbitMQ - built on top of Rabbot.",
   "main": "./lib/index.js",
   "scripts": {
@@ -27,7 +27,7 @@
   "homepage": "https://github.com/rkstar/wabbit#readme",
   "dependencies": {
     "lodash": "^4.13.1",
-    "rabbot": "^1.0.3"
+    "rabbot": "^1.0.6"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
